@@ -1,15 +1,10 @@
-<script>
-export default {
-  data() {
-    return {
-      count: 0
-    }
-  },
-  methods: {
-    increment() {
-      this.count++
-    }
-  }
+<script setup>
+import { ref } from 'vue'
+
+let count = ref(0)
+
+function increment() {
+  count.value++
 }
 </script>
 
