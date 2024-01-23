@@ -3,12 +3,12 @@ import MyHello from './components/MyHello.vue'
 </script>
 
 <template>
-  <my-hello title="Кроссвки PUMA" :price="95000" :isAdded="true">
-    <button>Добавить</button>
-  </my-hello>
-  <my-hello title="Кроссвки PUMA" :price="95000" :isAdded="true">
-    <h4>test</h4>
-  </my-hello>
+  <div class="mb-5">
+    <my-hello title="Кроссвки PUMA" :price="95000" :isAdded="true" />
+  </div>
+  <div class="mb-5">
+    <my-hello title="Кроссвки PUMA" :price="95000" :isAdded="true" />
+  </div>
 </template>
 
 <style scoped></style>
