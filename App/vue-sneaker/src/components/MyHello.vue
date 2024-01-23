@@ -1,9 +1,11 @@
 <script setup>
-defineProps({
+const props = defineProps({
   title: String,
   price: Number,
   isAdded: Boolean
 })
+
+console.log(props)
 </script>
 
 <template>
