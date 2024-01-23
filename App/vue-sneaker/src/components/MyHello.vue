@@ -13,6 +13,7 @@ console.log(props)
     <h2>{{ title }}</h2>
     <h3>Цена: {{ price }}</h3>
     <h3>Цена: {{ isAdded }}</h3>
+    <slot></slot>
   </div>
 </template>
 
