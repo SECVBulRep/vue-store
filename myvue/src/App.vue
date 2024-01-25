@@ -2,6 +2,8 @@
 export default {
   data() {
     return {
+      title: '',
+      body: '',
       posts: [
         { id: 1, title: 'Заголовок 1', body: 'Post body' },
         { id: 2, title: 'Заголовок 2', body: 'Post body' },
@@ -10,17 +12,45 @@ export default {
       ]
     }
   },
-  methods: {}
+  methods: {
+    createPost() {
+      const newPost = {
+        id: Date.now(),
+        title: this.title,
+        body: this.body
+      }
+
+      this.posts.push(newPost)
+
+      this.title = ''
+      this.body = ''
+    }
+  },
+  inputTitle(e) {
+    this.title = e.target.value
+  }
 }
 </script>
 
 <template>
   <div class="app">
-    <form>
+    <form @submit.prevent>
       <h4>Создание поста</h4>
-      <input class="input" type="text" placeholder="Название" />
-      <input class="input" type="text" placeholder="Описание" />
-      <button class="btn">создать</button>
+      <input
+        v-bind:value="title"
+        @input="title = $event.target.value"
+        class="input"
+        type="text"
+        placeholder="Название"
+      />
+      <input
+        v-bind:value="body"
+        @input="body = $event.target.value"
+        class="input"
+        type="text"
+        placeholder="Описание"
+      />
+      <button class="btn" @click="createPost">создать</button>
     </form>
     <div class="post" v-for="post in posts">
       <div><strong>Название</strong> {{ post.title }}</div>
