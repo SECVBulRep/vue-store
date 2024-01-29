@@ -7,21 +7,19 @@
 </template>
 
 <script>
+
+import toogleMixin from '@/mixins/toggleMixin.js'
+
 export default {
   name: 'my-dialog',
-  props: {
-    show: {
-      type: Boolean,
-      required: true,
-      default: false
-    }
-  },
-  methods: {
-    hideDialog() {
-      this.$emit('update:show', false)
-    }
+  mixins: [toogleMixin] 
+  ,
+  mounted() {
+    console.log('dialog mounted')
   }
 }
+
+
 </script>
 
 <style lang="scss" scoped>
