@@ -2,6 +2,7 @@
 <template>
   <div class="app">
     <h1>Страница с постами</h1>
+    <my-input placeholder="введите строку для посика" v-model="searchQueue"></my-input>
     <div class="app__btns">
       <my-button @click="showDialog" style="">Добавить пост</my-button>
       <my-select v-model="selectedSort" :options="sortOptions"></my-select>
@@ -9,7 +10,7 @@
     <my-dialog v-model:show="dialogVisible">
       <post-form @create="CreatePost"></post-form>
     </my-dialog>
-    <post-list v-if="!isPostLoading" :posts="sortedPosts" @remove="removePost"></post-list>
+    <post-list v-if="!isPostLoading" :posts="sortedAndSearched" @remove="removePost"></post-list>
     <div v-else>Loading ...</div>
   </div>
 </template>
@@ -22,6 +23,7 @@ import MyButton from './components/ui/myButton.vue'
 import MyDialog from './components/ui/myDialog.vue'
 import axios from 'axios'
 import MySelect from './components/ui/mySelect.vue'
+import MyInput from './components/ui/myInput.vue'
 
 export default {
   components: {
@@ -29,7 +31,8 @@ export default {
     postList,
     MyDialog,
     MyButton,
-    MySelect
+    MySelect,
+    MyInput
   },
 
   data() {
@@ -38,6 +41,7 @@ export default {
       dialogVisible: false,
       isPostLoading: false,
       selectedSort: '',
+      searchQueue: '',
       sortOptions: [
         { value: 'title', name: 'по названию' },
         { value: 'body', name: 'по содержимому' }
@@ -50,6 +54,9 @@ export default {
       return [...this.posts].sort((post1, post2) => {
         return post1[this.selectedSort]?.localeCompare(post2[this.selectedSort])
       })
+    },
+    sortedAndSearched() {
+      return this.sortedPosts.filter((post) => post.title.includes(this.searchQueue))
     }
   },
 
