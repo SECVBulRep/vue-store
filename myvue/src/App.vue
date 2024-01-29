@@ -2,11 +2,15 @@
 <template>
   <div class="app">
     <h1>Страница с постами</h1>
-    <my-button @click="showDialog" style="margin: 15px">Добавить пост</my-button>
+    <div class="app__btns">
+      <my-button @click="showDialog" style="">Добавить пост</my-button>
+      <my-select v-model="selectedSort" :options="sortOptions"></my-select>
+    </div>
     <my-dialog v-model:show="dialogVisible">
       <post-form @create="CreatePost"></post-form>
     </my-dialog>
-    <post-list :posts="posts" @remove="removePost"></post-list>
+    <post-list v-if="!isPostLoading" :posts="sortedPosts" @remove="removePost"></post-list>
+    <div v-else>Loading ...</div>
   </div>
 </template>
 
@@ -17,21 +21,48 @@ import postList from './components/postList.vue'
 import MyButton from './components/ui/myButton.vue'
 import MyDialog from './components/ui/myDialog.vue'
 import axios from 'axios'
+import MySelect from './components/ui/mySelect.vue'
 
 export default {
   components: {
     postForm,
     postList,
     MyDialog,
-    MyButton
+    MyButton,
+    MySelect
   },
 
   data() {
     return {
       posts: [],
-      dialogVisible: false
+      dialogVisible: false,
+      isPostLoading: false,
+      selectedSort: '',
+      sortOptions: [
+        { value: 'title', name: 'по названию' },
+        { value: 'body', name: 'по содержимому' }
+      ]
     }
   },
+
+  computed: {
+    sortedPosts() {
+      return [...this.posts].sort((post1, post2) => {
+        return post1[this.selectedSort]?.localeCompare(post2[this.selectedSort])
+      })
+    }
+  },
+
+  watch: {
+    /*selectedSort(newVal) {
+      console.log(newVal)
+
+      this.posts.sort((post1, post2) => {
+        return post1[this.selectedSort]?.localeCompare(post2[this.selectedSort])
+      })
+    }*/
+  },
+
   methods: {
     CreatePost(post) {
       this.posts.push(post)
@@ -45,13 +76,14 @@ export default {
     },
     async fetchPosts() {
       try {
-        setTimeout(async () => {
-          const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
-          this.posts = response.data
-          console.log(response)
-        }, 1000)
+        this.isPostLoading = true
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
+        this.posts = response.data
+        console.log(response)
       } catch (error) {
         alert(error)
+      } finally {
+        this.isPostLoading = false
       }
     }
   },
@@ -71,5 +103,11 @@ export default {
 
 .app {
   padding: 20px;
+}
+
+.app__btns {
+  margin: 15px;
+  display: flex;
+  justify-content: space-between;
 }
 </style>
